@@ -17,7 +17,7 @@ var Enemy = cc.LabelTTF.extend({
   ctor:function () {
     this._super();
     this.initWithString("㍻" , "Arial", 18, cc.SIZE_ZERO, cc.TEXT_ALIGNMENT_CENTER, cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
-    this.setColor(cc.c3b(255, 0, 0));
+    this.setColor(cc.c3b(255, 128, 0));
   },
   init:function () {
     this.scheduleUpdate();

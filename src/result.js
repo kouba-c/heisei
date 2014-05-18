@@ -7,8 +7,8 @@ var Result = cc.Layer.extend({
     this._super();
     var size = cc.Director.getInstance().getWinSize();
 
-    var resultLabel = cc.LabelTTF.create("Socre::" + g.score, "Arial", 20);
-    resultLabel.setPosition(cc.p(size.width / 2, size.height / 2));
+    var resultLabel = cc.LabelTTF.create("Socre : " + g.score, "Arial", 20);
+    resultLabel.setPosition(cc.p(size.width / 2, size.height / 2 + 25));
     this.addChild(resultLabel);
 
     var highScore = parseInt(sys.localStorage.getItem("Heisei3/highScore") || 0);
@@ -16,8 +16,8 @@ var Result = cc.Layer.extend({
       highScore = g.score;
       sys.localStorage.setItem("Heisei3/highScore", highScore);
     }
-    var highLabel = cc.LabelTTF.create("HighScore::" + highScore, "Arial", 20);
-    highLabel.setPosition(cc.p(size.width / 2, size.height / 2 - 50));
+    var highLabel = cc.LabelTTF.create("HighScore : " + highScore, "Arial", 20);
+    highLabel.setPosition(cc.p(size.width / 2, size.height / 2 - 25));
     this.addChild(highLabel);
 
 

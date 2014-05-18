@@ -33,7 +33,7 @@ var Ship = cc.LabelTTF.extend({
     this.setPosition(pos.x + this.v.x, pos.y + this.v.y);
 
     if (pos.x < -10 || pos.x > winSize.width + 10 || pos.y < -20 || pos.y > winSize.height + 10) {
-      this.state = STATE.DEAD;
+      this.kill();
     }
   },
   boost:function (dir) {
@@ -51,6 +51,11 @@ var Ship = cc.LabelTTF.extend({
     else {
       return cur_sp;
     }
+  },
+  kill:function () {
+    this.state = STATE.DEAD;
+    this.setString("※");
+    this.setColor(cc.c3b(255, 0, 0));
   },
 });
 
