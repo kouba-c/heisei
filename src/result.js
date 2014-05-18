@@ -20,14 +20,18 @@ var Result = cc.Layer.extend({
     highLabel.setPosition(cc.p(size.width / 2, size.height / 2 - 50));
     this.addChild(highLabel);
 
+
+    var goGameScene = function () {
+      g.score = 0;
+      cc.Director.getInstance().replaceScene(new GameScene());
+    };
     this.scheduleOnce(function () {
-      this.onTouchesBegan = function (touches, event) {
-        g.score = 0;
-        cc.Director.getInstance().replaceScene(new GameScene());
-      };
+      this.onTouchesBegan = function (touches, event) { goGameScene(); };
+      this.onKeyDown = function (e) { goGameScene(); };
     }, 1.0);
 
     this.setTouchEnabled(true);
+    this.setKeyboardEnabled(true);
     return true;
   },
 

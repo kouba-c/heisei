@@ -1,13 +1,22 @@
 var g_mainLayer;
+var GRAVITY = 0.15;
+var MAX_UP_SPEED = 4.5;
+var MAX_DOWN_SPEED = -5.5;
+var BOOST_SPEED_X = 1.2;
+var BOOST_SPEED_Y = 6.5;
+
 
 var Game = cc.Layer.extend({
   screenRect:null,
+  audio:null,
   init:function () {
     this._super();
     g_mainLayer = this;
 
     var size = cc.Director.getInstance().getWinSize();
     this.screenRect = cc.rect(0, 0, size.width, size.height);
+
+    this.audio = cc.AudioEngine.getInstance();
 
     // Space Ship
     this.ship = Ship.create();
@@ -28,6 +37,7 @@ var Game = cc.Layer.extend({
     this.addChild(this.scoreLabel, 10);
     this.scheduleUpdate();
     this.setTouchEnabled(true);
+    this.setKeyboardEnabled(true);
 
     return true;
   },
@@ -37,57 +47,67 @@ var Game = cc.Layer.extend({
 
     var pos = this.ship.getPosition();
     if (this.touched) {
-      var k = 0.9;
-      pos.y = (pos.y * k) + (this.touched.y * (1.0 - k));
-      this.ship.setPosition(pos);
+      this.ship.boost(this.touched);
+      this.touched = null;
+      this.audio.playEffect(s_boost);
     }
 
     for (var i = 0; i < this.enemies.length; i++) {
       var enemy = this.enemies[i];
       var distance = cc.pDistance(pos, enemy.getPosition());
-      if (distance < 8) {
-        if (!this.gameover) {
-          this.gameover = true;
-          this.onGameover();
-        }
+      if (distance < 8 && this.ship.state == STATE.LIVE) {
+        this.ship.state = STATE.DEAD;
       }
     }
 
-    this.scoreLabel.setString("Score : " + g.score);
+    if (this.ship.state == STATE.DEAD) {
+      if (!this.gameover) {
+        this.setTouchEnabled(false);
+        this.setKeyboardEnabled(false);
+        this.gameover = true;
+        this.onGameover();
+      }
+    }
+    else {
+      g.score++;
+    }
 
-    g.score++;
+    this.scoreLabel.setString("Score : " + g.score);
   },
 
   onGameover:function () {
-    var audioEngine = cc.AudioEngine.getInstance();
-    audioEngine.playEffect(s_bomb);
-    audioEngine.stopMusic(s_bgm);
+    this.audio.playEffect(s_bomb);
+    this.audio.stopMusic(s_bgm);
     var transition = cc.TransitionFade.create(1.0, new ResultScene());
     cc.Director.getInstance().replaceScene(transition);
   },
 
   onTouchesBegan:function (touches ,event) {
-    this.touched = touches[0].getLocation();
+    var winSize = this.screenRect;
+    if(touches[0].getLocation().x < winSize.width / 2) {
+      this.touched = DIRECTION.LEFT;
+    }
+    else {
+      this.touched = DIRECTION.RIGHT;
+    }
   },
-  onTouchesMoved:function (touches ,event) {
-    this.touched = touches[0].getLocation();
-  },
-  onTouchesEnded:function (touches ,event) {
-    this.touched = null;
-  },
-  onTouchesCancelled:function (touches ,event) {
-    this.touched = null;
+  onKeyDown:function (e) {
+    if(e == cc.KEY.left) {
+      this.touched = DIRECTION.LEFT;
+    }
+    else if(e == cc.KEY.right) {
+      this.touched = DIRECTION.RIGHT;
+    }
   },
 });
 
 var GameScene = cc.Scene.extend({
   onEnter:function () {
-    var audioEngine = cc.AudioEngine.getInstance();
-    audioEngine.playMusic(s_bgm, true);
 
     this._super();
     var layer = new Game();
     layer.init();
+    layer.audio.playMusic(s_bgm, true);
     this.addChild(layer);
   }
 });
