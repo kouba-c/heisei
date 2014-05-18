@@ -16,7 +16,7 @@ function randomDirection() {
 var Enemy = cc.LabelTTF.extend({
   ctor:function () {
     this._super();
-    this.initWithString("㍻" , "Arial", 18);//, cc.SIZE_ZERO, cc.TEXT_ALIGNMENT_CENTER, cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
+    this.initWithString("㍻" , "Arial", 18, cc.SIZE_ZERO, cc.TEXT_ALIGNMENT_CENTER, cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
     this.setColor(cc.c3b(255, 0, 0));
   },
   initState:function () {
@@ -25,7 +25,7 @@ var Enemy = cc.LabelTTF.extend({
     this.v = cc.p((Math.random() * 2 + 2) * this.direction, 0);
 
     var size = cc.Director.getInstance().getWinSize();
-    var startPostionAdjust = Math.random() * 3 * 50;
+    var startPostionAdjust = Math.random() * 3 * 100;
     var xPosition = this.direction == DIRECTION.RIGHT ?  0 - startPostionAdjust : size.width + startPostionAdjust;
     this.setPosition(cc.p(
           xPosition,
@@ -94,7 +94,7 @@ var Game = cc.Layer.extend({
     for (var i = 0; i < this.enemies.length; i++) {
       var enemy = this.enemies[i];
       var distance = cc.pDistance(pos, enemy.getPosition());
-      if (distance < 25) {
+      if (distance < 8) {
         if (!this.gameover) {
           this.gameover = true;
           this.onGameover();
