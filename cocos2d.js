@@ -39,6 +39,7 @@
         appFiles:[
             'src/resource.js',
             'src/game.js',
+            'src/ship.js',
             'src/enemy.js',
             'src/result.js',
         ]

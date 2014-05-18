@@ -9,12 +9,11 @@ var Game = cc.Layer.extend({
     var size = cc.Director.getInstance().getWinSize();
     this.screenRect = cc.rect(0, 0, size.width, size.height);
 
-
     // Space Ship
-    this.ship = cc.LabelTTF.create("Ё", "Arial", 18);
-    this.ship.setPosition(cc.p(size.width / 2, size.height / 2));
+    this.ship = Ship.create();
     this.addChild(this.ship, 5);
 
+    // Enemy
     this.enemies = [];
     for (var i = 0; i < 15; i++) {
       var enemy = Enemy.create()
@@ -22,6 +21,7 @@ var Game = cc.Layer.extend({
       this.enemies.push(enemy);
     }
 
+    // Score
     this.scoreLabel = cc.LabelTTF.create("", "Arial", 17);
     this.scoreLabel.setPosition(cc.p(20, size.height - 20));
     this.scoreLabel.setAnchorPoint(cc.p(0, 1));
@@ -53,7 +53,7 @@ var Game = cc.Layer.extend({
       }
     }
 
-    this.scoreLabel.setString("Score::" + g.score);
+    this.scoreLabel.setString("Score : " + g.score);
 
     g.score++;
   },
