@@ -41,6 +41,7 @@
             'src/game.js',
             'src/ship.js',
             'src/enemy.js',
+            'src/boost_effect.js',
             'src/result.js',
         ]
     };
