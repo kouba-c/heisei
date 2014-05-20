@@ -39,6 +39,10 @@ var Game = cc.Layer.extend({
     this.setTouchEnabled(true);
     this.setKeyboardEnabled(true);
 
+    // Effect
+    this.effect = BoostEffect.create();
+    this.addChild(this.effect, 5);
+
     return true;
   },
 
@@ -53,8 +57,7 @@ var Game = cc.Layer.extend({
       this.audio.playEffect(s_boost);
 
       var ship_position = this.ship.getPosition();
-      this.effect = BoostEffect.create(cc.p(ship_position.x + (8 * -1 * touch_dir), ship_position.y - 8));
-      this.addChild(this.effect, 5);
+      this.effect.setPosition(cc.p(ship_position.x + (8 * -1 * touch_dir), ship_position.y - 8));
       this.effect.runAction();
     }
 
